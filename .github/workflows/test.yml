@@ -21,5 +21,15 @@ jobs:
     - name: Install Dependencies
       run: npm i
 
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+
     - name: Run tests (Playwright)
-      run: npm run build
+      run: npm test
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 2
