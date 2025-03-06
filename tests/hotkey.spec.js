@@ -249,3 +249,93 @@ test("should thrown when target selector is invalid", async ({ page }) => {
         });
     })).rejects.toThrow("No element found for selector '#unknown'");
 });
+
+test("should only trigger on trusted events when 'trusted' option is set to true", async ({ page }) => {
+    await page.evaluate(() => {
+        const el = document.getElementById("text");
+
+        window.registerHotkey(el, "Ctrl + K", () => {
+            window.hotkeyTriggered = true;
+        }, "keydown", { trusted: true });
+    });
+
+    await page.locator("#text").focus();
+
+    await page.keyboard.down("Control");
+    await page.keyboard.press("K");
+
+    const triggered = await page.evaluate(() => window.hotkeyTriggered);
+    expect(triggered).toBe(true);
+});
+
+test("should trigger on untrusted events when 'trusted' option is not set", async ({ page }) => {
+    await page.evaluate(() => {
+        const el = document.getElementById("text");
+
+        window.registerHotkey(el, "Ctrl + K", () => {
+            window.hotkeyTriggered = true;
+        });
+
+        const event = new KeyboardEvent("keydown", {
+            key: "k",
+            code: "KeyK",
+            ctrlKey: true,
+            bubbles: true
+        });
+
+        el.dispatchEvent(event);
+    });
+
+    await page.locator("#text").focus();
+
+    const triggered = await page.evaluate(() => window.hotkeyTriggered);
+    expect(triggered).toBe(true);
+});
+
+test("should trigger on untrusted events when 'trusted' option is false", async ({ page }) => {
+    await page.evaluate(() => {
+        const el = document.getElementById("text");
+
+        window.registerHotkey(el, "Ctrl + K", () => {
+            window.hotkeyTriggered = true;
+        }, "keydown", { trusted: false });
+
+        const event = new KeyboardEvent("keydown", {
+            key: "k",
+            code: "KeyK",
+            ctrlKey: true,
+            bubbles: true
+        });
+
+        el.dispatchEvent(event);
+    });
+
+    await page.locator("#text").focus();
+
+    const triggered = await page.evaluate(() => window.hotkeyTriggered);
+    expect(triggered).toBe(true);
+});
+
+test("should not trigger on untrusted events when 'trusted' option is true", async ({ page }) => {
+    await page.evaluate(() => {
+        const el = document.getElementById("text");
+
+        window.registerHotkey(el, "Ctrl + K", e => {
+            window.hotkeyTriggered = true;
+        }, "keydown", { trusted: true });
+
+        const event = new KeyboardEvent("keydown", {
+            key: "k",
+            code: "KeyK",
+            ctrlKey: true,
+            bubbles: true
+        });
+
+        el.dispatchEvent(event);
+    });
+
+    await page.locator("#text").focus();
+
+    const triggered = await page.evaluate(() => window.hotkeyTriggered);
+    expect(triggered).toBe(false);
+});
