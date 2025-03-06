@@ -1,4 +1,6 @@
 # Hotkey
+[![NPM](https://img.shields.io/npm/v/@ramstack/hotkey)](https://www.npmjs.com/package/@ramstack/hotkey)
+[![MIT](https://img.shields.io/github/license/rameel/ramstack.hotkey.js)](https://github.com/rameel/ramstack.hotkey.js/blob/main/LICENSE)
 
 The `@ramstack/hotkey` package is a very small and lightweight library for handling hotkeys.
 The library weighs around 1.3KB and approximately 750 bytes when gzipped.
