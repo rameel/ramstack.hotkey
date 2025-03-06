@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   publish:
-    if: github.repository == 'rameel/ramstack.hotkey.js'
+    if: github.repository == 'rameel/ramstack.hotkey'
     name: "Publish Packages"
     runs-on: ubuntu-latest
 
