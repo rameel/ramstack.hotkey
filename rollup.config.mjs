@@ -1,11 +1,8 @@
-import replace from "@rollup/plugin-replace";
 import resolve from "@rollup/plugin-node-resolve";
 import size from "rollup-plugin-bundle-size";
 import stripComments from "strip-comments";
 import terser from "@rollup/plugin-terser";
 import typescript from '@rollup/plugin-typescript';
-
-const production = process.env.NODE_ENV === "production";
 
 const terserOptions = {
     output: {
@@ -28,12 +25,7 @@ const plugins = [
     resolve(),
     typescript(),
     size(),
-    strip(),
-    replace({
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-        "__DEV": !production,
-        preventAssignment: true
-    })
+    strip()
 ];
 
 export default [{
