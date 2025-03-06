@@ -77,7 +77,7 @@ an entire group of elements at once.
  * @param {string} hotkey - The combination of keys for the hotkey, e.g., "Ctrl+Alt+Delete".
  * @param {(e: KeyboardEvent) => void} handler - The function to be called when the hotkey is triggered.
  * @param {string} [eventName="keydown"] - The name of the event to listen for (default is "keydown").
- * @param {AddEventListenerOptions | boolean | undefined} [options] - Additional options for the event listener.
+ * @param {HotkeyEventListenerOptions | boolean | undefined} [options] - Additional options for the event listener.
  *
  * @returns {() => void} - A function to unregister the hotkey.
  */
@@ -86,7 +86,7 @@ function registerHotkey(
     hotkey: string,
     handler: (e: KeyboardEvent) => void,
     eventName?: string,
-    options?: AddEventListenerOptions | boolean | undefined): () => void;
+    options?: HotkeyEventListenerOptions | boolean | undefined): () => void;
 ```
 **Parameters**
 
@@ -170,6 +170,28 @@ registerHotkey(window, "Ctrl + Up", e => {
 #### options (optional)
 Additional options for the event listener. See [Options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
 
+```ts
+/**
+ * Extended options for hotkey event listeners.
+ */
+export interface HotkeyEventListenerOptions extends AddEventListenerOptions {
+    /**
+     * If specified, ensures that only trusted events are handled.
+     */
+    trusted?: boolean;
+}
+```
+The `trusted` option ensures that only events marked as trusted are handled.
+This can help prevent synthetic or untrusted events from triggering hotkeys.
+
+```js
+registerHotkey(window, "Ctrl + S", e => {
+    e.preventDefault();
+    console.log("Saving...");
+}, "keydown", { trusted: true });
+```
+In this example, the hotkey will only trigger for events that are marked as trusted, preventing manually dispatched or synthetic events from interfering.
+
 #### Returns
 A function that, when called, unregisters the hotkey.
 
@@ -181,13 +203,9 @@ const cleanup = registerHotkey(...);
 cleanup();
 ```
 
-## Changelog
-#### [1.0.2]
-- Improve README
-
-#### [1.0.1]
-- Preserve the user-defined hotkey in the error message
-
+## Contributions
+Bug reports and contributions are welcome.
 
 ## License
-This package is released under the **MIT License**.
+This package is released as open source under the **MIT License**.
+See the [LICENSE](https://github.com/rameel/ramstack.hotkey/blob/main/LICENSE) file for more details.
