@@ -14,9 +14,11 @@
   "author": "rameel <rameel-b@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c",
+    "build": "rollup -c",
     "prebuild": "npm run clean",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "cross-env NODE_OPTIONS=--no-warnings playwright test",
+    "pretest": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,9 +30,11 @@
     "shortcut"
   ],
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
+    "@types/node": "^22.13.9",
     "cross-env": "^7.0.3",
     "rimraf": "^6.0.1",
     "rollup": "^4.34.9",

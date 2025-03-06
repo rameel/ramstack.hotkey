@@ -1,0 +1,35 @@
+name: Build & Test
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: "Build & Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+
+    - name: Run tests (Playwright)
+      run: npm test
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 2

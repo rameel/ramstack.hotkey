@@ -1,6 +1,10 @@
-coverage
-node_modules/
-.idea/
-.vscode/
-.vs/
-dist/
+/coverage
+/node_modules/
+/.idea/
+/.vscode/
+/.vs/
+/dist/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
