@@ -32,14 +32,7 @@ jobs:
         run: npm run build
 
       - name: Publish packages
-        run: |
-          for dir in dist/*; do
-            if [ -d "$dir" ]; then
-              cd "$dir"
-              npm publish --access public
-              cd - > /dev/null
-            fi
-          done
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
