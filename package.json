@@ -1,6 +1,6 @@
 {
   "name": "@ramstack/hotkey",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A lightweight Javascript library for handling hotkeys. No external dependencies.",
   "type": "module",
   "main": "dist/hotkey.esm.js",
