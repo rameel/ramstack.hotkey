@@ -45,13 +45,23 @@ interface Hotkey {
 }
 
 /**
+ * Extended options for hotkey event listeners.
+ */
+export interface HotkeyEventListenerOptions extends AddEventListenerOptions {
+    /**
+     * If specified, ensures that only trusted events are handled.
+     */
+    trusted?: boolean;
+}
+
+/**
  * Registers a hotkey on the specified target element.
  *
  * @param {EventTarget | string} target - The target element on which the hotkey will be registered.
  * @param {string} hotkey - The combination of keys for the hotkey, e.g., "Ctrl+Alt+Delete".
  * @param {(e: KeyboardEvent) => void} handler - The function to be called when the hotkey is triggered.
  * @param {string} [eventName="keydown"] - The name of the event to listen for (default is "keydown").
- * @param {AddEventListenerOptions | boolean | undefined} [options] - Additional options for the event listener.
+ * @param {HotkeyEventListenerOptions | boolean | undefined} [options] - Additional options for the event listener.
  *
  * @returns {() => void} - A function to unregister the hotkey.
  */
@@ -60,7 +70,7 @@ export function registerHotkey(
     hotkey: string,
     handler: (e: KeyboardEvent) => void,
     eventName: string = "keydown",
-    options?: AddEventListenerOptions | boolean | undefined): () => void {
+    options?: HotkeyEventListenerOptions | boolean | undefined): () => void {
 
     const info = describe(hotkey);
 
@@ -69,10 +79,12 @@ export function registerHotkey(
     }
 
     return listen(target, eventName, function (this: EventTarget, e: KeyboardEvent) {
-        if (!(e.target as HTMLElement)?.closest("[data-hotkey-ignore]")) {
-            if (info.code === e.code.toUpperCase()) {
-                if (control_keys.every(n => info[n as keyof Hotkey] === e[n as keyof KeyboardEvent])) {
-                    handler.call(this, e);
+        if (!(options as HotkeyEventListenerOptions)?.trusted || e.isTrusted) {
+            if (!(e.target as HTMLElement)?.closest("[data-hotkey-ignore]")) {
+                if (info.code === e.code.toUpperCase()) {
+                    if (control_keys.every(n => info[n as keyof Hotkey] === e[n as keyof KeyboardEvent])) {
+                        handler.call(this, e);
+                    }
                 }
             }
         }
