@@ -33,7 +33,7 @@ export default [{
     output: [{
         file: "dist/hotkey.esm.js",
         format: "esm"
-    },{
+    }, {
         file: "dist/hotkey.esm.min.js",
         format: "esm",
         plugins: [terser(terserOptions)]
@@ -57,7 +57,7 @@ function strip() {
         name: "strip",
         transform(source) {
             return {
-                code: stripComments(source)
+                code: stripComments(source, {})
             };
         }
     };
