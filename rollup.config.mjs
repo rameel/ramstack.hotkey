@@ -1,3 +1,4 @@
+import path from "node:path";
 import resolve from "@rollup/plugin-node-resolve";
 import size from "rollup-plugin-bundle-size";
 import stripComments from "strip-comments";
@@ -24,8 +25,9 @@ const terserOptions = {
 const plugins = [
     resolve(),
     typescript(),
-    size(),
-    strip()
+    strip(),
+    trimWs(),
+    size()
 ];
 
 export default [{
@@ -59,6 +61,18 @@ function strip() {
             return {
                 code: stripComments(source, {})
             };
+        }
+    };
+}
+
+function trimWs() {
+    return {
+        name: "trimWs",
+        generateBundle(options, bundle) {
+            if (options.file.match(/\.js$/)) {
+                const key = path.basename(options.file);
+                bundle[key].code = bundle[key].code.trim();
+            }
         }
     };
 }
