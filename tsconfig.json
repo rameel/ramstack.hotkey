@@ -4,7 +4,6 @@
     "module": "ES2020",
     "strict": true,
     "declaration": true,
-    "outDir": "./dist",
     "declarationDir": "./dist/types"
   },
   "files": [
