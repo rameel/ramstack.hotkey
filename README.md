@@ -1,7 +1,7 @@
 # Hotkey
 
 The `@ramstack/hotkey` package is a very small and lightweight library for handling hotkeys.
-The library weighs around 1.32KB and approximately 750 bytes when gzipped.
+The library weighs around 1.3KB and approximately 750 bytes when gzipped.
 
 ## Installation
 
@@ -208,4 +208,4 @@ Bug reports and contributions are welcome.
 
 ## License
 This package is released as open source under the **MIT License**.
-See the [LICENSE](https://github.com/rameel/ramstack.hotkey/blob/main/LICENSE) file for more details.
+See the [LICENSE](https://github.com/rameel/ramstack.hotkey.js/blob/main/LICENSE) file for more details.
