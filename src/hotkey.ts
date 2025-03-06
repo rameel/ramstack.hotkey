@@ -29,7 +29,7 @@ const aliases: Record<string, string> = {
     "slash": "/"
 };
 
-const controlKeys: string[] = [
+const control_keys: string[] = [
     "ctrlKey",
     "altKey",
     "shiftKey",
@@ -71,7 +71,7 @@ export function registerHotkey(
     return listen(target, eventName, function (this: EventTarget, e: KeyboardEvent) {
         if (!(e.target as HTMLElement)?.closest("[data-hotkey-ignore]")) {
             if (info.code === e.code.toUpperCase()) {
-                if (controlKeys.every(n => info[n as keyof Hotkey] === e[n as keyof KeyboardEvent])) {
+                if (control_keys.every(n => info[n as keyof Hotkey] === e[n as keyof KeyboardEvent])) {
                     handler.call(this, e);
                 }
             }
@@ -92,7 +92,7 @@ function describe(hotkey: string): Hotkey {
                 break;
 
             default:
-                k.length || invalidKey(hotkey);
+                k.length || error_invalid_key(hotkey);
                 k = k.toUpperCase();
 
                 data.code = k.length === 1 && k >= 'A' && k <= 'Z' ? `KEY${k}` : k;
@@ -107,7 +107,7 @@ function describe(hotkey: string): Hotkey {
         metaKey: false
     });
 
-    info.code || invalidKey(hotkey);
+    info.code || error_invalid_key(hotkey);
     return info;
 }
 
@@ -116,7 +116,7 @@ function listen(target: EventTarget, type: string, callback: EventListener | nul
     return () => target.removeEventListener(type, callback, options);
 }
 
-function invalidKey(hotkey: string): never {
+function error_invalid_key(hotkey: string): never {
     error(`Invalid hotkey: '${hotkey}'`);
 }
 

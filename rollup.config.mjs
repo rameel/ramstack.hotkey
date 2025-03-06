@@ -1,13 +1,11 @@
-import replace from "@rollup/plugin-replace";
+import path from "node:path";
 import resolve from "@rollup/plugin-node-resolve";
 import size from "rollup-plugin-bundle-size";
-import stripComments from "strip-comments";
+import strip_comments from "strip-comments";
 import terser from "@rollup/plugin-terser";
 import typescript from '@rollup/plugin-typescript';
 
-const production = process.env.NODE_ENV === "production";
-
-const terserOptions = {
+const terser_options = {
     output: {
         comments: false
     },
@@ -27,13 +25,9 @@ const terserOptions = {
 const plugins = [
     resolve(),
     typescript(),
-    size(),
-    strip(),
-    replace({
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-        "__DEV": !production,
-        preventAssignment: true
-    })
+    remove_comments(),
+    trim_ws(),
+    size()
 ];
 
 export default [{
@@ -41,10 +35,10 @@ export default [{
     output: [{
         file: "dist/hotkey.esm.js",
         format: "esm"
-    },{
+    }, {
         file: "dist/hotkey.esm.min.js",
         format: "esm",
-        plugins: [terser(terserOptions)]
+        plugins: [terser(terser_options)]
     }, {
         name: "window",
         file: "dist/hotkey.js",
@@ -55,18 +49,30 @@ export default [{
         file: "dist/hotkey.min.js",
         format: "iife",
         extend: true,
-        plugins: [terser(terserOptions)]
+        plugins: [terser(terser_options)]
     }],
     plugins
 }]
 
-function strip() {
+function remove_comments() {
     return {
         name: "strip",
         transform(source) {
             return {
-                code: stripComments(source)
+                code: strip_comments(source, {})
             };
+        }
+    };
+}
+
+function trim_ws() {
+    return {
+        name: "trim-ws",
+        generateBundle(options, bundle) {
+            if (options.file.match(/\.js$/)) {
+                const key = path.basename(options.file);
+                bundle[key].code = bundle[key].code.trim();
+            }
         }
     };
 }

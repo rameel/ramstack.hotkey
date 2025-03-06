@@ -14,13 +14,15 @@
   "author": "rameel <rameel-b@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c",
+    "build": "rollup -c",
     "prebuild": "npm run clean",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "cross-env NODE_OPTIONS=--no-warnings playwright test",
+    "pretest": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rameel/hotkey.git"
+    "url": "git+https://github.com/rameel/ramstack.hotkey.git"
   },
   "keywords": [
     "hotkey",
@@ -28,17 +30,21 @@
     "shortcut"
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
+    "@playwright/test": "^1.50.1",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/node": "^22.13.9",
     "cross-env": "^7.0.3",
-    "rimraf": "^5.0.5",
-    "rollup": "^4.9.6",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.34.9",
     "rollup-plugin-bundle-size": "^1.0.3",
     "strip-comments": "^2.0.1",
-    "terser": "^5.27.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.3.3"
+    "terser": "^5.39.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.34.9"
   }
 }
