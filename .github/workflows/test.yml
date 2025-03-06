@@ -26,3 +26,5 @@ jobs:
 
     - name: Run tests (Playwright)
       run: npm test
+      env:
+          CI: true
