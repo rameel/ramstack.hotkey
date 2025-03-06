@@ -241,3 +241,11 @@ test("should trigger on 'keyup' when using keyboard.press()", async ({ page }) =
     const triggered = await page.evaluate(() => window.hotkeyTriggered);
     expect(triggered).toBe(true);
 });
+
+test("should thrown when target selector is invalid", async ({ page }) => {
+    await expect(page.evaluate(() => {
+        window.registerHotkey("#unknown", "K", () => {
+            window.hotkeyTriggered = true;
+        });
+    })).rejects.toThrow("No element found for selector '#unknown'");
+});
